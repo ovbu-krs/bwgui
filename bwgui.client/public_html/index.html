@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="js/jquery-3.0.0.js" type="text/javascript"></script>
+        <script src="js/jquery-ui.js" type="text/javascript"></script>
+        <script src="js/knockout.js" type="text/javascript"></script>
+        
+        <script src="js/simpleGrid.js" type="text/javascript"></script>
+        <script src="js/io.js" type="text/javascript" defer="defer"></script>
+        
+        <script>
+            //$(function(){});
+            
+          $(document).ready(function(){console.log('отработало ready');});
+            
+        </script>
+    </head>
+    <body  data-bind="event: { onload: addItemOfElemenet(0, {id_object: 3, id_event: 3, params: 3})}">
+       
+        <div id="0" data-bind='simpleGrid: gridViewModel(0, 
+                    [
+                        { headerText: "id_object", rowText: "id_object" },
+                        { headerText: "id_event", rowText: "id_event" },
+                        { headerText: "params", rowText: "params" }
+                    ]
+                    )'>
+            
+              
+        </div>
+        <div id="1">
+               id_element <input id="val" value="1"/>
+        </div>
+        <div id="2">
+            <p data-bind="with: getItemOfElemenet(0, val.value)">
+               id_object <input id="id_object" data-bind="value: id_object"/>
+               id_event <input id="id_event" data-bind="value: id_event"/>
+               params: <input id="params" data-bind="value: params"/>
+            </p>
+           
+        </div>
+        
+        <button data-bind="click: function() {addItemOfElemenet(0, {id_object: id_object.value, id_event: id_event.value, params: params.value});}">
+             Add item
+        </button>
+        
+        <button data-bind="click: function() {setItemOfElemenet(0, val.value, {id_object: id_object.value, id_event: id_event.value, params: params.value});}">
+             Edit item
+        </button>
+        <button data-bind="click: function() {var p = val.value; val.value=0; deleteItemOfElemenet(0, p); }">
+             Delete item
+        </button>
+        
+         
+    </body>
+</html>
