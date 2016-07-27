@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="PostgreSQL" id="Project_3a485243" html="y" template="Default" database="PostgreSQL" >
+	<schema name="bwgui_processor" catalogname="postgres" schemaname="bwgui_processor" >
+		<table name="Group_object" >
+			<column name="user_Group" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="object" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="access_type" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="uk_group_object" unique="PRIMARY_KEY" >
+				<column name="user_Group" />
+				<column name="object" />
+				<column name="access_type" />
+			</index>
+			<fk name="fk_group_acces" to_schema="bwgui_processor" to_table="access_type" delete_action="cascade" update_action="cascade" >
+				<fk_column name="access_type" pk="access_type" />
+			</fk>
+			<fk name="fk_group_object" to_schema="bwgui_processor" to_table="group_acess" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user_Group" pk="user_Group" />
+			</fk>
+			<fk name="fk_object_group" to_schema="bwgui_processor" to_table="object" delete_action="cascade" update_action="cascade" >
+				<fk_column name="object" pk="object" />
+			</fk>
+		</table>
+		<table name="access_type" >
+			<column name="access_type" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="name" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="description" type="text" length="2147483647" decimal="0" jt="12" />
+			<index name="pk_access_type" unique="PRIMARY_KEY" >
+				<column name="access_type" />
+			</index>
+		</table>
+		<table name="attr" >
+			<column name="attr" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="body" type="text" length="2147483647" decimal="0" jt="12" mandatory="y" />
+			<column name="description" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="section" type="text" length="2147483647" decimal="0" jt="12" />
+			<index name="pk_attr" unique="PRIMARY_KEY" >
+				<column name="attr" />
+			</index>
+		</table>
+		<table name="cache" >
+			<column name="body" type="text" length="2147483647" decimal="0" jt="12" mandatory="y" />
+			<column name="create_date" type="date" length="13" decimal="0" jt="91" mandatory="y" />
+			<column name="object" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="uk_cache" unique="PRIMARY_KEY" >
+				<column name="body" />
+				<column name="create_date" />
+				<column name="object" />
+			</index>
+			<fk name="fk_cache" to_schema="bwgui_processor" to_table="object" delete_action="cascade" update_action="cascade" >
+				<fk_column name="object" pk="object" />
+			</fk>
+		</table>
+		<table name="data_view" >
+			<column name="data_view" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="name" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="description" type="text" length="2147483647" decimal="0" jt="12" />
+			<index name="pk_data_view" unique="PRIMARY_KEY" >
+				<column name="data_view" />
+			</index>
+		</table>
+		<table name="event" >
+			<column name="event" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="name" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="function_name" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="dscription" type="text" length="2147483647" decimal="0" jt="12" />
+			<index name="pk_id_event" unique="PRIMARY_KEY" >
+				<column name="event" />
+			</index>
+		</table>
+		<table name="group_acess" >
+			<column name="user_Group" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="name" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="description" type="text" length="2147483647" decimal="0" jt="12" />
+			<index name="pk_group" unique="PRIMARY_KEY" >
+				<column name="user_Group" />
+			</index>
+		</table>
+		<table name="html" >
+			<column name="html" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="body" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="description" type="text" length="2147483647" decimal="0" jt="12" />
+			<index name="pk_object_html" unique="PRIMARY_KEY" >
+				<column name="html" />
+			</index>
+		</table>
+		<table name="input_param" >
+			<column name="input_param" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="param_array" type="_text" length="2147483647" decimal="0" jt="2003" />
+			<index name="pk_id_input_param" unique="PRIMARY_KEY" >
+				<column name="input_param" />
+			</index>
+		</table>
+		<table name="object" >
+			<column name="object" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="object_html" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="description" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="modified_date" type="date" length="13" decimal="0" jt="91" mandatory="y" />
+			<index name="pk_id_object" unique="PRIMARY_KEY" >
+				<column name="object" />
+			</index>
+			<fk name="fk_object_html" to_schema="bwgui_processor" to_table="html" delete_action="cascade" update_action="cascade" >
+				<fk_column name="object_html" pk="html" />
+			</fk>
+		</table>
+		<table name="object_attr" >
+			<column name="attr" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="object" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="value" type="text" length="2147483647" decimal="0" jt="12" mandatory="y" />
+			<index name="Key19" unique="PRIMARY_KEY" >
+				<column name="attr" />
+				<column name="object" />
+			</index>
+			<fk name="fk_attr_object" to_schema="bwgui_processor" to_table="attr" >
+				<fk_column name="attr" pk="attr" />
+			</fk>
+			<fk name="fk_object_attr" to_schema="bwgui_processor" to_table="object" delete_action="cascade" update_action="cascade" >
+				<fk_column name="object" pk="object" />
+			</fk>
+		</table>
+		<table name="object_data_view" >
+			<column name="object" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="data_view" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="field" type="text" length="2147483647" decimal="0" jt="12" mandatory="y" />
+			<index name="Key20" unique="PRIMARY_KEY" >
+				<column name="data_view" />
+			</index>
+			<fk name="fk_data_view_object" to_schema="bwgui_processor" to_table="data_view" >
+				<fk_column name="data_view" pk="data_view" />
+			</fk>
+			<fk name="fk_object_data_view" to_schema="bwgui_processor" to_table="object" >
+				<fk_column name="object" pk="object" />
+			</fk>
+		</table>
+		<table name="object_links" >
+			<column name="link_to" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="link_who" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="link_from" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="uk_object_links" unique="PRIMARY_KEY" >
+				<column name="link_to" />
+				<column name="link_who" />
+				<column name="link_from" />
+			</index>
+			<fk name="fk_object_link_from" to_schema="bwgui_processor" to_table="object" delete_action="cascade" update_action="cascade" >
+				<fk_column name="link_from" pk="object" />
+			</fk>
+			<fk name="fk_object_link_who" to_schema="bwgui_processor" to_table="object" delete_action="cascade" update_action="cascade" >
+				<fk_column name="link_who" pk="object" />
+			</fk>
+			<fk name="fk_object_links_to" to_schema="bwgui_processor" to_table="object" >
+				<fk_column name="link_to" pk="object" />
+			</fk>
+		</table>
+		<table name="object_objects" >
+			<column name="object_left" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="object_right" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="Key12" unique="PRIMARY_KEY" >
+				<column name="object_left" />
+				<column name="object_right" />
+			</index>
+			<fk name="fk_left_object" to_schema="bwgui_processor" to_table="object" delete_action="cascade" update_action="cascade" >
+				<fk_column name="object_left" pk="object" />
+			</fk>
+			<fk name="fk_right_object" to_schema="bwgui_processor" to_table="object" delete_action="cascade" update_action="cascade" >
+				<fk_column name="object_right" pk="object" />
+			</fk>
+		</table>
+		<table name="object_style" >
+			<column name="object_style" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="object" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="value" type="text" length="2147483647" decimal="0" jt="12" mandatory="y" />
+			<index name="Key17" unique="PRIMARY_KEY" >
+				<column name="object_style" />
+				<column name="object" />
+			</index>
+			<fk name="fk_object_style" to_schema="bwgui_processor" to_table="object" delete_action="cascade" update_action="cascade" >
+				<fk_column name="object" pk="object" />
+			</fk>
+			<fk name="fk_style" to_schema="bwgui_processor" to_table="style" >
+				<fk_column name="object_style" pk="style" />
+			</fk>
+		</table>
+		<table name="objects_events" >
+			<column name="event" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="param_input" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="object" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="pk_object_event" unique="PRIMARY_KEY" >
+				<column name="event" />
+				<column name="param_input" />
+				<column name="object" />
+			</index>
+			<fk name="fk_event" to_schema="bwgui_processor" to_table="event" delete_action="cascade" update_action="cascade" >
+				<fk_column name="event" pk="event" />
+			</fk>
+			<fk name="fk_input_param" to_schema="bwgui_processor" to_table="input_param" delete_action="cascade" update_action="cascade" >
+				<fk_column name="param_input" pk="input_param" />
+			</fk>
+			<fk name="fk_object" to_schema="bwgui_processor" to_table="object" delete_action="cascade" update_action="cascade" >
+				<fk_column name="object" pk="object" />
+			</fk>
+		</table>
+		<table name="page" >
+			<column name="page" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="description" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="modified_date" type="date" length="13" decimal="0" jt="91" />
+			<index name="pk_page" unique="PRIMARY_KEY" >
+				<column name="page" />
+			</index>
+		</table>
+		<table name="relations" >
+			<column name="relations_type" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="html" type="integer" length="10" decimal="0" jt="4" />
+			<column name="object_style" type="integer" length="10" decimal="0" jt="4" />
+			<column name="attr" type="integer" length="10" decimal="0" jt="4" />
+			<column name="event" type="integer" length="10" decimal="0" jt="4" />
+			<index name="uk_relations" unique="PRIMARY_KEY" >
+				<column name="relations_type" />
+			</index>
+			<fk name="fk_attr_comp" to_schema="bwgui_processor" to_table="attr" >
+				<fk_column name="attr" pk="attr" />
+			</fk>
+			<fk name="fk_event_comp" to_schema="bwgui_processor" to_table="event" delete_action="cascade" update_action="cascade" >
+				<fk_column name="event" pk="event" />
+			</fk>
+			<fk name="fk_html_comp" to_schema="bwgui_processor" to_table="html" delete_action="cascade" update_action="cascade" >
+				<fk_column name="html" pk="html" />
+			</fk>
+			<fk name="fk_relations_type" to_schema="bwgui_processor" to_table="relations_type" delete_action="cascade" update_action="cascade" >
+				<fk_column name="relations_type" pk="relations_type" />
+			</fk>
+			<fk name="fk_style_comp" to_schema="bwgui_processor" to_table="style" >
+				<fk_column name="object_style" pk="style" />
+			</fk>
+		</table>
+		<table name="relations_type" >
+			<column name="relations_type" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="name" type="text" length="2147483647" decimal="0" jt="12" mandatory="y" />
+			<column name="desription" type="text" length="2147483647" decimal="0" jt="12" />
+			<index name="pk_relations_type" unique="PRIMARY_KEY" >
+				<column name="relations_type" />
+			</index>
+		</table>
+		<table name="script" >
+			<column name="body" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="description" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="name" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="object" type="integer" length="10" decimal="0" jt="4" />
+			<fk name="fk_script" to_schema="bwgui_processor" to_table="object" >
+				<fk_column name="object" pk="object" />
+			</fk>
+		</table>
+		<table name="server_param" >
+			<column name="name" type="text" length="2147483647" decimal="0" jt="12" mandatory="y" />
+			<column name="value" type="text" length="2147483647" decimal="0" jt="12" mandatory="y" />
+			<column name="comment" type="text" length="2147483647" decimal="0" jt="12" />
+			<index name="uk_server_param" unique="PRIMARY_KEY" >
+				<column name="name" />
+				<column name="value" />
+			</index>
+		</table>
+		<table name="style" >
+			<column name="style" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="body" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="description" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="avalable_value" type="_text" length="2147483647" decimal="0" jt="2003" />
+			<column name="section" type="text" length="2147483647" decimal="0" jt="12" />
+			<index name="pk_id_object_style" unique="PRIMARY_KEY" >
+				<column name="style" />
+			</index>
+		</table>
+		<table name="user_group" >
+			<column name="username" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="user_Group" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="Key25" unique="PRIMARY_KEY" >
+				<column name="username" />
+				<column name="user_Group" />
+			</index>
+			<fk name="fk_user_group" to_schema="bwgui_processor" to_table="group_acess" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user_Group" pk="user_Group" />
+			</fk>
+			<fk name="fk_username_group" to_schema="bwgui_processor" to_table="username" delete_action="cascade" update_action="cascade" >
+				<fk_column name="username" pk="username" />
+			</fk>
+		</table>
+		<table name="user_log" >
+			<column name="username" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="user_sesssion" type="uuid" length="2147483647" decimal="0" jt="1111" mandatory="y" />
+			<column name="object" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="event" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="user_log" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="request" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="creation_time" type="date" length="13" decimal="0" jt="91" mandatory="y" />
+			<column name="work_time" type="timestamp" length="29" decimal="6" jt="93" />
+			<index name="uk_userlog" unique="PRIMARY_KEY" >
+				<column name="username" />
+				<column name="user_sesssion" />
+				<column name="object" />
+				<column name="event" />
+			</index>
+			<fk name="fk_event_log" to_schema="bwgui_processor" to_table="event" update_action="cascade" >
+				<fk_column name="event" pk="event" />
+			</fk>
+			<fk name="fk_object_log" to_schema="bwgui_processor" to_table="object" delete_action="cascade" update_action="cascade" >
+				<fk_column name="object" pk="object" />
+			</fk>
+			<fk name="fk_user_log" to_schema="bwgui_processor" to_table="user_session" >
+				<fk_column name="username" pk="username" />
+				<fk_column name="user_sesssion" pk="user_sesssion" />
+			</fk>
+		</table>
+		<table name="user_session" >
+			<column name="username" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="user_sesssion" type="uuid" length="2147483647" decimal="0" jt="1111" mandatory="y" />
+			<column name="ip_addres" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="begin_date" type="date" length="13" decimal="0" jt="91" />
+			<column name="end_date" type="date" length="13" decimal="0" jt="91" />
+			<index name="pk_session" unique="PRIMARY_KEY" >
+				<column name="username" />
+				<column name="user_sesssion" />
+			</index>
+			<fk name="fk_user" to_schema="bwgui_processor" to_table="username" >
+				<fk_column name="username" pk="username" />
+			</fk>
+		</table>
+		<table name="username" >
+			<column name="username" type="serial" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="user_name" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="user_description" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="user_damain" type="text" length="2147483647" decimal="0" jt="12" />
+			<column name="user_password" type="text" length="2147483647" decimal="0" jt="12" />
+			<index name="pk_id_user" unique="PRIMARY_KEY" >
+				<column name="username" />
+			</index>
+		</table>
+		<sequence name="access_type_access_type_seq" start="1" />
+		<sequence name="attr_attr_seq" start="1" />
+		<sequence name="data_view_data_view_seq" start="1" />
+		<sequence name="event_event_seq" start="1" />
+		<sequence name="group_acess_user_Group_seq" start="1" />
+		<sequence name="html_html_seq" start="1" />
+		<sequence name="input_param_input_param_seq" start="1" />
+		<sequence name="object_object_seq" start="1" />
+		<sequence name="page_page_seq" start="1" />
+		<sequence name="relations_type_relations_type_seq" start="1" />
+		<sequence name="style_style_seq" start="1" />
+		<sequence name="username_username_seq" start="1" />
+		<function name="json_extend_object" id="Function_368fe1a3" isSystem="false" />
+		<function name="myexec" id="Function_2b35cda5" isSystem="false" />
+		<function name="parser1" id="Function_29bfe3f7" isSystem="false" />
+	</schema>
+	<connector name="PostgreSQL" database="PostgreSQL" driver_class="org.postgresql.Driver" driver_jar="postgresql-9.4.1208.jar" host="192.168.1.143" port="5432" instance="postgres" user="postgres" passwd="cG9zdGdyZXM=" />
+	<layout name="Default" id="Layout_f2ccdf" show_relation_columns="y" >
+		<entity schema="bwgui_processor" name="object" color="bef5b3" x="405" y="330" />
+		<entity schema="bwgui_processor" name="user_session" color="bef5b3" x="45" y="510" />
+		<entity schema="bwgui_processor" name="username" color="bef5b3" x="225" y="510" />
+		<entity schema="bwgui_processor" name="user_group" color="bef5b3" x="240" y="705" />
+		<entity schema="bwgui_processor" name="group_acess" color="bef5b3" x="240" y="855" />
+		<entity schema="bwgui_processor" name="Group_object" color="cab3f5" x="240" y="990" />
+		<entity schema="bwgui_processor" name="page" color="cab3f5" x="45" y="705" />
+		<entity schema="bwgui_processor" name="script" color="f5d8b3" x="675" y="405" />
+		<entity schema="bwgui_processor" name="object_style" color="b3ccf5" x="540" y="705" />
+		<entity schema="bwgui_processor" name="style" color="b3ccf5" x="690" y="705" />
+		<entity schema="bwgui_processor" name="object_attr" color="b3ccf5" x="540" y="525" />
+		<entity schema="bwgui_processor" name="attr" color="b3ccf5" x="690" y="525" />
+		<entity schema="bwgui_processor" name="relations" color="b3ccf5" x="915" y="510" />
+		<entity schema="bwgui_processor" name="relations_type" color="b3ccf5" x="930" y="705" />
+		<entity schema="bwgui_processor" name="input_param" color="b3b3f5" x="795" y="135" />
+		<entity schema="bwgui_processor" name="html" color="f5d8b3" x="915" y="345" />
+		<entity schema="bwgui_processor" name="object_data_view" color="bef5b3" x="615" y="240" />
+		<entity schema="bwgui_processor" name="data_view" color="bef5b3" x="780" y="225" />
+		<entity schema="bwgui_processor" name="user_log" color="b3b3f5" x="60" y="45" />
+		<entity schema="bwgui_processor" name="object_links" color="f5d8b3" x="300" y="210" />
+		<entity schema="bwgui_processor" name="object_objects" color="b3ccf5" x="150" y="300" />
+		<entity schema="bwgui_processor" name="cache" color="bef5b3" x="150" y="390" />
+		<entity schema="bwgui_processor" name="objects_events" color="b3b3f5" x="585" y="90" />
+		<entity schema="bwgui_processor" name="event" color="b3b3f5" x="945" y="45" />
+		<entity schema="bwgui_processor" name="access_type" color="cab3f5" x="45" y="990" />
+		<entity schema="bwgui_processor" name="server_param" color="cab3f5" x="45" y="840" />
+	</layout>
+	<layout name="Sample Layout with Groups" id="Layout_1d54dea8" show_relation_columns="y" >
+		<entity schema="bwgui_processor" name="Group_object" color="cab3f5" x="210" y="585" />
+		<entity schema="bwgui_processor" name="access_type" color="cab3f5" x="375" y="585" />
+		<entity schema="bwgui_processor" name="attr" color="b3ccf5" x="1095" y="585" />
+		<entity schema="bwgui_processor" name="cache" color="bef5b3" x="570" y="750" />
+		<entity schema="bwgui_processor" name="data_view" color="bef5b3" x="735" y="750" />
+		<entity schema="bwgui_processor" name="event" color="b3b3f5" x="375" y="945" />
+		<entity schema="bwgui_processor" name="group_acess" color="bef5b3" x="900" y="225" />
+		<entity schema="bwgui_processor" name="html" color="f5d8b3" x="705" y="945" />
+		<entity schema="bwgui_processor" name="input_param" color="b3b3f5" x="45" y="1095" />
+		<entity schema="bwgui_processor" name="object" color="bef5b3" x="570" y="585" />
+		<entity schema="bwgui_processor" name="object_attr" color="b3ccf5" x="1095" y="765" />
+		<entity schema="bwgui_processor" name="object_data_view" color="bef5b3" x="735" y="585" />
+		<entity schema="bwgui_processor" name="object_links" color="f5d8b3" x="570" y="945" />
+		<entity schema="bwgui_processor" name="object_objects" color="b3ccf5" x="390" y="210" />
+		<entity schema="bwgui_processor" name="object_style" color="b3ccf5" x="390" y="390" />
+		<entity schema="bwgui_processor" name="objects_events" color="b3b3f5" x="210" y="945" />
+		<entity schema="bwgui_processor" name="page" color="cab3f5" x="375" y="735" />
+		<entity schema="bwgui_processor" name="relations" color="b3ccf5" x="930" y="585" />
+		<entity schema="bwgui_processor" name="relations_type" color="b3ccf5" x="930" y="765" />
+		<entity schema="bwgui_processor" name="script" color="f5d8b3" x="705" y="1095" />
+		<entity schema="bwgui_processor" name="server_param" color="cab3f5" x="210" y="735" />
+		<entity schema="bwgui_processor" name="style" color="b3ccf5" x="225" y="210" />
+		<entity schema="bwgui_processor" name="user_group" color="bef5b3" x="750" y="225" />
+		<entity schema="bwgui_processor" name="user_log" color="b3b3f5" x="210" y="1095" />
+		<entity schema="bwgui_processor" name="user_session" color="bef5b3" x="585" y="45" />
+		<entity schema="bwgui_processor" name="username" color="bef5b3" x="570" y="360" />
+		<callout x="570" y="465" pointer="NO" >
+			<comment><![CDATA[This layout demonstrates the grouping of tables and creation of multiple layouts.
+One table may show in multiple layouts.
+Double-click any table header, columns or foreign key lines to edit.]]></comment>
+		</callout>
+		<group name="object" color="f1f7f0" >
+			<entity schema="bwgui_processor" name="object" />
+			<entity schema="bwgui_processor" name="object_data_view" />
+			<entity schema="bwgui_processor" name="data_view" />
+			<entity schema="bwgui_processor" name="cache" />
+		</group>
+		<group name="relations" color="f0f3f7" >
+			<entity schema="bwgui_processor" name="relations" />
+			<entity schema="bwgui_processor" name="attr" />
+			<entity schema="bwgui_processor" name="object_attr" />
+			<entity schema="bwgui_processor" name="relations_type" />
+		</group>
+		<group name="objects_events" color="f0f0f7" >
+			<entity schema="bwgui_processor" name="objects_events" />
+			<entity schema="bwgui_processor" name="event" />
+			<entity schema="bwgui_processor" name="user_log" />
+			<entity schema="bwgui_processor" name="input_param" />
+		</group>
+		<group name="object_links" color="f7f4f0" >
+			<entity schema="bwgui_processor" name="object_links" />
+			<entity schema="bwgui_processor" name="html" />
+			<entity schema="bwgui_processor" name="script" />
+		</group>
+		<group name="Group_object" color="f3f0f7" >
+			<entity schema="bwgui_processor" name="Group_object" />
+			<entity schema="bwgui_processor" name="access_type" />
+			<entity schema="bwgui_processor" name="page" />
+			<entity schema="bwgui_processor" name="server_param" />
+		</group>
+		<group name="style" color="f0f3f7" >
+			<entity schema="bwgui_processor" name="style" />
+			<entity schema="bwgui_processor" name="object_objects" />
+			<entity schema="bwgui_processor" name="object_style" />
+		</group>
+		<group name="user_group" color="f1f7f0" >
+			<entity schema="bwgui_processor" name="user_group" />
+			<entity schema="bwgui_processor" name="group_acess" />
+			<entity schema="bwgui_processor" name="username" />
+			<entity schema="bwgui_processor" name="user_session" />
+		</group>
+	</layout>
+	<layout name="Sample Layout with Relational Data Browse" id="Layout_2d750d6f" show_relation_columns="y" >
+		<entity schema="bwgui_processor" name="Group_object" color="cab3f5" x="210" y="585" />
+		<entity schema="bwgui_processor" name="access_type" color="cab3f5" x="375" y="585" />
+		<entity schema="bwgui_processor" name="attr" color="b3ccf5" x="1095" y="585" />
+		<entity schema="bwgui_processor" name="cache" color="bef5b3" x="570" y="750" />
+		<entity schema="bwgui_processor" name="data_view" color="bef5b3" x="735" y="750" />
+		<entity schema="bwgui_processor" name="event" color="b3b3f5" x="375" y="945" />
+		<entity schema="bwgui_processor" name="group_acess" color="bef5b3" x="900" y="225" />
+		<entity schema="bwgui_processor" name="html" color="f5d8b3" x="705" y="945" />
+		<entity schema="bwgui_processor" name="input_param" color="b3b3f5" x="45" y="1095" />
+		<entity schema="bwgui_processor" name="object" color="bef5b3" x="570" y="585" />
+		<entity schema="bwgui_processor" name="object_attr" color="b3ccf5" x="1095" y="765" />
+		<entity schema="bwgui_processor" name="object_data_view" color="bef5b3" x="735" y="585" />
+		<entity schema="bwgui_processor" name="object_links" color="f5d8b3" x="570" y="945" />
+		<entity schema="bwgui_processor" name="object_objects" color="b3ccf5" x="390" y="210" />
+		<entity schema="bwgui_processor" name="object_style" color="b3ccf5" x="390" y="390" />
+		<entity schema="bwgui_processor" name="objects_events" color="b3b3f5" x="210" y="945" />
+		<entity schema="bwgui_processor" name="page" color="cab3f5" x="375" y="735" />
+		<entity schema="bwgui_processor" name="relations" color="b3ccf5" x="930" y="585" />
+		<entity schema="bwgui_processor" name="relations_type" color="b3ccf5" x="930" y="765" />
+		<entity schema="bwgui_processor" name="script" color="f5d8b3" x="705" y="1095" />
+		<entity schema="bwgui_processor" name="server_param" color="cab3f5" x="210" y="735" />
+		<entity schema="bwgui_processor" name="style" color="b3ccf5" x="225" y="210" />
+		<entity schema="bwgui_processor" name="user_group" color="bef5b3" x="750" y="225" />
+		<entity schema="bwgui_processor" name="user_log" color="b3b3f5" x="210" y="1095" />
+		<entity schema="bwgui_processor" name="user_session" color="bef5b3" x="585" y="45" />
+		<entity schema="bwgui_processor" name="username" color="bef5b3" x="570" y="360" />
+		<callout x="570" y="465" pointer="NO" >
+			<comment><![CDATA[Bellow is a Relational Data Browse for exploring data from multiple tables bind by foreign keys.
+Right-click table header to set filters.
+Press the foreign key ( arrow icon) near title to descend into further tables.
+If your schema misses foreign keys create virtual foreign keys in the layout.]]></comment>
+		</callout>
+		<browser id="Browse_eb096f7" name="Sample Relational Data Browse" >
+			<browse_table schema="bwgui_processor" entity="object" x="10" y="10" width="400" height="300" >
+				<browse_table schema="bwgui_processor" entity="html" fk="fk_object_html" x="420" y="10" width="400" height="300" record_view="y" />
+			</browse_table>
+		</browser>
+	</layout>
+</project>
