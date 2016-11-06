@@ -22,7 +22,8 @@ public class BaseConnector
     {
         String rez = "";
         try (
-                Connection connection = DriverManager.getConnection("jdbc:postgresql://192.168.1.143:5432/postgres", "postgres", "postgres"); 
+                //Connection connection = DriverManager.getConnection("jdbc:postgresql://192.168.1.143:5432/postgres", "pgsql","pgsql"); 
+                Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "pgsql","pgsql"); 
                 Statement satement = connection.createStatement(); 
                 ResultSet result = satement.executeQuery("select bwgui_processor.do_event('" + args + "')");
              ) 
