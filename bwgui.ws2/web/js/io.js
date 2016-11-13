@@ -19,10 +19,16 @@ var initialData = [{id_object: 1, id_event: 1, params: 1},
 
 
 
-this.DataModel = function() 
+DataModel = function() 
 {
     var self = this;
     self.items = ko.observableArray();
+    
+    self.put_log = function(_txt)
+    {
+       console.log(_txt);
+       
+    };
     
     self.addData = function(name, element)
     {
@@ -32,19 +38,17 @@ this.DataModel = function()
         //     self.addItemOfElemenetById(name, element[i]);
         //}
        
-      
-
-        console.log('отработало addData('+name+','+element+')');
+        self.put_log('отработало addData('+name+','+element+')');
     };
     
    
     //self.items.push(ko.observable(1));
-    console.log('массив проинициализирован');
+    self.put_log('массив проинициализирован');
     
   
     self.getData = function(element)
     {
-        console.log('отрабатывает getData('+element+')');
+        self.put_log('отрабатывает getData('+element+')');
         var mas = self.items.slice(0, self.items.count);
         return  mas[element].value;
         //return self.items[element];
@@ -52,12 +56,15 @@ this.DataModel = function()
     
     self.getDataById = function(id)
     {
-        console.log('отрабатывает getDataById('+id+')');
+        self.put_log('отрабатывает getDataById('+id+')');
         var mas = self.items.slice(0, self.items.count);
         for (var i = 0; i < mas.length; ++i) 
         {
             if(mas[i].id===id)
-                return mas[i].value;
+            {
+                //self.put_log(mas[i].value);
+                return mas[i].value.slice(0, mas.count);
+            }
         }
         return null;
         
@@ -66,7 +73,7 @@ this.DataModel = function()
    
     self.getItemOfElemenet = function(element, idx)
     {
-        console.log('отрабатывает getItemOfElemenet('+element+','+ idx+')');
+        self.put_log('отрабатывает getItemOfElemenet('+element+','+ idx+')');
         var mas = self.getData(element);
         return  mas.slice(0, mas.count)[idx];
        
@@ -74,7 +81,7 @@ this.DataModel = function()
     
     self.getItemOfElemenetById = function(id, idx)
     {
-        console.log('отрабатывает getItemOfElemenetById('+id +','+idx+')');
+        self.put_log('отрабатывает getItemOfElemenetById('+id +','+idx+')');
         var mas = self.getDataById(id);
         return  mas.slice(0, mas.count)[idx];
        
@@ -82,7 +89,7 @@ this.DataModel = function()
     
     self.deleteItemOfElemenet = function(element, idx)
     {
-        console.log('отрабатывает deleteItemOfElemenet('+element+','+idx+')');
+        self.put_log('отрабатывает deleteItemOfElemenet('+element+','+idx+')');
         var mas = self.getData(element);
         mas.splice(idx, 1)[0];
        
@@ -92,20 +99,20 @@ this.DataModel = function()
         self.getData(element).splice(idx,1);
         ko.tasks.runEarly();
         self.getData(element).splice(idx, 0, _eitem);
-        console.log('отработало editItemOfElemenet('+element+','+ idx+','+ _eitem+')');
+        self.put_log('отработало editItemOfElemenet('+element+','+ idx+','+ _eitem+')');
        
                 
     };
     self.addItemOfElemenet = function(element, _aitem) 
     {
         self.getData(element).push(_aitem); 
-        console.log('отработало addItemOfElemenet('+element+','+ _aitem+')');
+        self.put_log('отработало addItemOfElemenet('+element+','+ _aitem+')');
     };
     
     self.addItemOfElemenetById = function(id, _aitem) 
     {
         self.getDataById(id).push(_aitem); 
-        console.log('отработало addItemOfElemenetById('+id+','+ _aitem+')');
+        self.put_log('отработало addItemOfElemenetById('+id+','+ _aitem+')');
     };
 
 
@@ -113,39 +120,43 @@ this.DataModel = function()
         self.gridViewModel.currentPageIndex(0);
     };
 
-    self.getGridViewModel = function(element, columns)
+    self.getGridViewModel = function(_element, _columns)
     {
-        console.log('отработывает getGridViewModel( '+element+','+ columns+')');  
+        self.put_log('отработывает getGridViewModel( '+_element+','+ _columns+')');  
         return new ko.simpleGrid.viewModel({
-        data: self.getData(element),
-        columns: columns,
+        data: self.getData(_element),
+        columns: _columns,
         pageSize: 4
         });
         
     };
     
-    self.getGridViewModelById = function(id, columns)
+    self.getGridViewModelById = function(_id, _columns)
     {
-        console.log('отработывает getGridViewModelById('+id+','+ columns+')');  
+        self.put_log('отработывает getGridViewModelById('+_id+','+ _columns+')');  
         return new ko.simpleGrid.viewModel({
-        data: self.getDataById(id),
-        columns: columns,
-        pageSize: 4
+        data: self.getDataById(_id),
+        columns: _columns,
+        pageSize: 10
         });
         
     };
     
-    self.PutData =function()
+    self.DoEvent =function(_idObj, _idEvnt)
     {
-        console.log('начало работать PutData'); 
-        self.CallWS('{"idApp":0, "idObj":0, "idEvnt":0, "args":{"tableowner":"pgsql","schemaname":"bwgui_processor"}}');
-        console.log('отработало PutData'); 
+        self.put_log('начало работать PutData('+_idObj+','+ _idEvnt+')'); 
+        self.CallWS('{"idApp":0, "idObj":'+_idObj+', "idEvnt":'+_idEvnt+', "args":{"tableowner":"pgsql","schemaname":"bwgui_processor"}}');
+        self.put_log('отработало PutData('+_idObj+','+ _idEvnt+')'); 
     };
 
     self.CallWS = function(_param)
     {
-        var ws_url = "http://ovbu:8080/bwgui.ws2/servlet";
+        
+        var ws_url = "http://localhost:8080/bwgui.ws2/servlet";
+        //var ws_url = "http://localhost:8080/bwgui.ws/bwguiws";
         //var full_url = ws_url +"?keys"+ _param;
+        
+        self.put_log('отработывает запрос: '+ws_url+'?parameter='+_param); 
         $.ajax({
                     url: ws_url,
                     data: "parameter="+ _param,
@@ -153,7 +164,7 @@ this.DataModel = function()
                     crossDomain: true,
                     success: self.WorkRez,
                     error: self.DisplayErr,
-                    fail: self.WorkRez
+                    fail: self.FailErr
 
                 });
 
@@ -166,54 +177,74 @@ this.DataModel = function()
                         }       */
     };
     
-    this.makeUI = function(parent, content)
+    this.makeUI = function(_parent_id, _id, _content)
     {      
-        console.log('начало работать makeUI('+parent+','+ content+')'); 
-        var div = document.createElement("div");
-        div.innerHTML = content;
-        document.getElementById(parent).appendChild(div);
+        if(_parent_id!=='')
+        {
+            self.put_log('начало работать makeUI('+'#'+_parent_id+','+_id+','+ _content+')'); 
+            $('#'+_parent_id).append(_content);
+            ko.cleanNode(document.getElementById(_id));
+            ko.applyBindings(self, document.getElementById(_id));
+            self.put_log('отработало makeUI('+_parent_id+','+ _content+')'); 
+        }
         
-      
-        
-        
-        //console.log('отрабатывает applyBindingsToNode');
-        //console.log('grid2: '+self.getDataById('grid2'));
-        //ko.applyBindingsToNode(document.getElementById('grid2'), self.getDataById('grid2'));
-        
-        console.log('отработало makeUI('+parent+','+ content+')'); 
-        
+    
     };
-     
+    this.makeStyle = function(_parent_id, _id, _content)
+    {      
+        if(_parent_id!=='')
+        {
+            self.put_log('начало работать makeStyle('+'#'+_parent_id+','+_id+','+ _content+')'); 
+            $('head').append(_content);
+            self.put_log('отработало makeStyle('+'#'+_parent_id+','+_id+','+ _content+')'); 
+        }
+        
+    
+    };
+    self.FailErr = function(_data, _textStatus)
+    {
+        self.put_log('начало работать FailErr'); 
+    };
     
     self.WorkRez = function(_data, _textStatus)
     {
-        console.log('начало работать WorkRez'); 
+        self.put_log('начало работать WorkRez '+_data); 
+       
+       
+        //сначала данные потом интерфйес
         
         if (JSON.parse(_data).hasOwnProperty("data"))
         {
             self.addData(JSON.parse(_data)["objId"], JSON.parse(_data)["data"]);
         }
-        
         if (JSON.parse(_data).hasOwnProperty("view")) 
         {
-            self.makeUI(JSON.parse(_data)["objId_parent"], JSON.parse(_data)["view"]);
+            self.makeUI(JSON.parse(_data)["objId_parent"], JSON.parse(_data)["objId"], JSON.parse(_data)["view"]);
+            //self.addItemOfElemenetById('grid2', '1');
+        }
+        if (JSON.parse(_data).hasOwnProperty("css")) 
+        {
+            self.makeStyle(JSON.parse(_data)["objId_parent"], JSON.parse(_data)["objId"], JSON.parse(_data)["css"]);
             //self.addItemOfElemenetById('grid2', '1');
         }
         
-          self.getDataById('grid2').valueHasMutated();
-         ko.utils.arrayPushAll(self.getDataById('grid2'), JSON.parse(_data)["data"]);
+        
+       
+        
+        //  self.getDataById('grid2').valueHasMutated();
+         //ko.utils.arrayPushAll(self.getDataById('grid2'), JSON.parse(_data)["data"]);
         
 
-        console.log('oтработало WorkRez'); 
+        self.put_log('oтработало WorkRez'); 
     };
     self.DisplayErr = function(_XMLHttpRequest, _textStatus, _errorThrown)
     {
         //document.getElementById("3").innerHTML = _XMLHttpRequest + "("+_textStatus+")";
-        console.log('отработало DisplayErr'); 
+        self.put_log('отработало DisplayErr'); 
     };
     
         
-    console.log('отработало PagedGridModel');  
+    self.put_log('отработало PagedGridModel');  
 };
 
 function Init()
@@ -221,8 +252,13 @@ function Init()
     dModel = new DataModel();
     dModel.addData('grid', initialData);
     ko.applyBindings(dModel);
+    
     console.log('применился биндинг');
 };
+
+
+
+
 /*
 ko.bindingProvider.instance.preprocessNode = function(node) {
     // Use DOM APIs such as setAttribute to modify 'node' if you wish.
@@ -233,7 +269,7 @@ ko.bindingProvider.instance.preprocessNode = function(node) {
     //    - Use DOM APIs such as removeChild to remove 'node' if required
     //    - Return an array of any new nodes that you've just inserted
     //      so that Knockout can apply any bindings to them
-    console.log('!!!!!!!!!!!вызов preprocessNode');
+    self.put_log('!!!!!!!!!!!вызов preprocessNode');
 };
 */
 
