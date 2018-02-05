@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-	 version="3.1">
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+    
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    
+    <resource-ref>
+ 	<description>psql_connect</description>
+ 	<res-ref-name>jdbc/postgres</res-ref-name>
+ 	<res-type>javax.sql.DataSource</res-type>
+ 	<res-auth>psql_connect</res-auth>
+    </resource-ref>
+    <resource-ref>
+ 	<description>psql_connect_pi</description>
+ 	<res-ref-name>jdbc/postgres_pi</res-ref-name>
+ 	<res-type>javax.sql.DataSource</res-type>
+ 	<res-auth>psql_connect</res-auth>
+    </resource-ref>
+
+    
+    <!-- <servlet>
+        <servlet-name>servlet</servlet-name>
+        <servlet-class>servlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>servlet</servlet-name>
+        <url-pattern>/servlet</url-pattern>
+    </servlet-mapping>-->
 </web-app>

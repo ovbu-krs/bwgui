@@ -5,13 +5,18 @@
  */
 package org.bwgui.ws2;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.annotation.*;
+
+//import java.io.IOException;
+//import java.io.PrintWriter;
+//import javax.servlet.ServletException;
+//import javax.servlet.annotation.WebServlet;
+//import javax.servlet.http.HttpServlet;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -35,14 +40,14 @@ public class servlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        response.addHeader("Access-Control-Allow-Origin", "http://localhost:8383");
+        response.addHeader("Access-Control-Allow-Origin", "http://localhost:8080");
 
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String parameter =  request.getParameter("parameter")!= null ? request.getParameter("parameter") : "new";   
             String rez = BaseConnector.Exec(parameter);
             out.println(rez);
-            //out.println("1");
+            //out.println("ура");
         
 
         }

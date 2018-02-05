@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/bwgui.ws2">
+    <Resource name="jdbc/postgres" auth="psql_connect"
+          type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
+          url="jdbc:postgresql://192.168.1.143:5432/postgres"
+          username="pgsql" password="pgsql" maxTotal="20" maxIdle="10"
+	maxWaitMillis="-1"/>
+
+    <Resource name="jdbc/postgres_pi" auth="psql_connect"
+          type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
+          url="jdbc:postgresql://192.168.1.12:5432/bwgui"
+          username="postgres" password="postgres" maxTotal="20" maxIdle="10"
+	maxWaitMillis="-1"/>
+</Context>        
+        
