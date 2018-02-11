@@ -9,13 +9,17 @@
  *
  * Date: 2016-06-26
  */
-        
 
-/* global data, textStatus, errorThrown */
+
+
+
+/* global data, textStatus, errorThrown, System */
+
 
 var initialData = [{id_object: 1, id_event: 1, params: 1},
                    {id_object: 2, id_event: 2, params: 2}];
                 
+//Context ctx = (new javax.naming.InitialContext.InitialContext()).getParamater("ip_server");
 
 
 
@@ -23,7 +27,13 @@ DataModel = function()
 {
     var self = this;
     self.items = ko.observableArray();
-    
+    self.cur_server ;
+     
+    self.set_server = function(_server)
+    {
+        self.cur_server = _server;
+        self.put_log('cur_server: '+self.cur_server);
+    };
     self.put_log = function(_txt)
     {
        console.log(_txt);
@@ -151,10 +161,9 @@ DataModel = function()
 
     self.CallWS = function(_param)
     {
+        //ip сервера задается через function Init()
+        var ws_url = "http://"+self.cur_server+"/bwgui.ws2/servlet";
         
-        var ws_url = "http://localhost:8080/bwgui.ws2/servlet";
-        //var ws_url = "http://localhost:8080/bwgui.ws/bwguiws";
-        //var full_url = ws_url +"?keys"+ _param;
         
         self.put_log('отработывает запрос: '+ws_url+'?parameter='+_param); 
         $.ajax({
@@ -250,14 +259,27 @@ DataModel = function()
 function Init()
 {
     dModel = new DataModel();
+
     dModel.addData('grid', initialData);
+    dModel.set_server(this.location.host);
+    
+    console.log('переменные инициализированы');
+    
     ko.applyBindings(dModel);
     
     console.log('применился биндинг');
 };
 
-
-
+/*
+function get_ip()
+{
+    
+    ////..var ctx=javax.naming.InitialContext.create();
+    console.log('hostname:'+location.hostname);
+    console.log('host:'+location.host);
+    return location.host;
+}
+*/
 
 /*
 ko.bindingProvider.instance.preprocessNode = function(node) {

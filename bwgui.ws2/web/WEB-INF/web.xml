@@ -24,7 +24,6 @@
  	<res-auth>psql_connect</res-auth>
     </resource-ref>
 
-    
     <!-- <servlet>
         <servlet-name>servlet</servlet-name>
         <servlet-class>servlet</servlet-class>
