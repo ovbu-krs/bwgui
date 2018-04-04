@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--проверить сначала в /var/lib/tomcat8/conf/context.xml-->
 <Context path="/bwgui.ws2">
     <Resource name="jdbc/postgres" auth="psql_connect"
           type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
@@ -8,8 +9,8 @@
 
     <Resource name="jdbc/postgres_pi" auth="psql_connect"
           type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
-          url="jdbc:postgresql://192.168.1.12:5432/bwgui"
-          username="postgres" password="postgres" maxTotal="20" maxIdle="10"
+          url="jdbc:postgresql://localhost:5432/postgres"
+          username="postgres" password="postgres" maxTotal="-1" maxIdle="-1"
 	maxWaitMillis="-1"/>
 </Context>        
         
