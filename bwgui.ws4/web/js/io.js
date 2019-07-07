@@ -152,11 +152,11 @@ DataModel = function()
         
     };
     
-    self.DoEvent =function(_idObj, _idEvnt)
+    self.DoEvent =function(_idApp, _idObj, _idEvnt, _Args)
     {
-        self.put_log('начало работать PutData('+_idObj+','+ _idEvnt+')'); 
-        self.CallWS('{"idApp":0, "idObj":'+_idObj+', "idEvnt":'+_idEvnt+', "args":{"tableowner":"pgsql","schemaname":"bwgui_processor"}}');
-        self.put_log('отработало PutData('+_idObj+','+ _idEvnt+')'); 
+        self.put_log('начало работать DoEvent('+_idApp+','+_idObj+','+ _idEvnt+','+_Args+')'); 
+        self.CallWS('{"idApp":'+_idApp+', "idObj":'+_idObj+', "idEvnt":'+_idEvnt+', "args":'+_Args+'}');
+        self.put_log('отработало DoEvent('+_idApp+','+_idObj+','+ _idEvnt+','+_Args+')'); 
     };
 
     self.CallWS = function(_param)
