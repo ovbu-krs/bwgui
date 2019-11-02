@@ -18,17 +18,17 @@
 
 var initialData = [{id_object: 1, id_event: 1, params: 1},
                    {id_object: 2, id_event: 2, params: 2}];
-                
+
 //Context ctx = (new javax.naming.InitialContext.InitialContext()).getParamater("ip_server");
 
 
 
-DataModel = function() 
+DataModel = function()
 {
     var self = this;
     self.items = ko.observableArray();
     self.cur_server ;
-     
+
     self.set_server = function(_server)
     {
         self.cur_server = _server;
@@ -37,25 +37,24 @@ DataModel = function()
     self.put_log = function(_txt)
     {
        console.log(_txt);
-       
     };
-    
+
     self.addData = function(name, element)
     {
         self.items.push({id: name, value: ko.observableArray(element)});
-        //for (var i = 0; i < element.length; ++i) 
+        //for (var i = 0; i < element.length; ++i)
         //{
         //     self.addItemOfElemenetById(name, element[i]);
         //}
-       
+
         self.put_log('отработало addData('+name+','+element+')');
     };
-    
-   
+
+
     //self.items.push(ko.observable(1));
     self.put_log('массив проинициализирован');
-    
-  
+
+
     self.getData = function(element)
     {
         self.put_log('отрабатывает getData('+element+')');
@@ -63,7 +62,7 @@ DataModel = function()
         return  mas[element].value;
         //return self.items[element];
     };
-    
+
     self.getDataById = function(id)
     {
         self.put_log('отрабатывает getDataById('+id+')');
@@ -77,32 +76,30 @@ DataModel = function()
             }
         }
         return null;
-        
+
     };
-    
-   
+
+
     self.getItemOfElemenet = function(element, idx)
     {
         self.put_log('отрабатывает getItemOfElemenet('+element+','+ idx+')');
         var mas = self.getData(element);
         return  mas.slice(0, mas.count)[idx];
-       
+
     };
-    
+
     self.getItemOfElemenetById = function(id, idx)
     {
         self.put_log('отрабатывает getItemOfElemenetById('+id +','+idx+')');
         var mas = self.getDataById(id);
         return  mas.slice(0, mas.count)[idx];
-       
     };
-    
+
     self.deleteItemOfElemenet = function(element, idx)
     {
         self.put_log('отрабатывает deleteItemOfElemenet('+element+','+idx+')');
         var mas = self.getData(element);
         mas.splice(idx, 1)[0];
-       
     };
     self.setItemOfElemenet = function(element, idx, _eitem) 
     {
@@ -110,15 +107,13 @@ DataModel = function()
         ko.tasks.runEarly();
         self.getData(element).splice(idx, 0, _eitem);
         self.put_log('отработало editItemOfElemenet('+element+','+ idx+','+ _eitem+')');
-       
-                
     };
     self.addItemOfElemenet = function(element, _aitem) 
     {
         self.getData(element).push(_aitem); 
         self.put_log('отработало addItemOfElemenet('+element+','+ _aitem+')');
     };
-    
+
     self.addItemOfElemenetById = function(id, _aitem) 
     {
         self.getDataById(id).push(_aitem); 
@@ -138,9 +133,9 @@ DataModel = function()
         columns: _columns,
         pageSize: 4
         });
-        
+ 
     };
-    
+
     self.getGridViewModelById = function(_id, _columns)
     {
         self.put_log('отработывает getGridViewModelById('+_id+','+ _columns+')');  
@@ -149,22 +144,27 @@ DataModel = function()
         columns: _columns,
         pageSize: 10
         });
-        
+
     };
-    
+
     self.DoEvent =function(_idApp, _idObj, _idEvnt, _Args)
     {
         self.put_log('начало работать DoEvent('+_idApp+','+_idObj+','+ _idEvnt+','+_Args+')'); 
-        self.CallWS('{"idApp":'+_idApp+', "idObj":'+_idObj+', "idEvnt":'+_idEvnt+', "args":'+_Args+'}');
-        self.put_log('отработало DoEvent('+_idApp+','+_idObj+','+ _idEvnt+','+_Args+')'); 
+	var c_args = '{}';
+	if( _Args.length > 0 )
+	{
+		c_args = _Args;
+	}
+        self.CallWS('{"idApp":'+_idApp+', "idObj":'+_idObj+', "idEvnt":'+_idEvnt+', "args":'+c_args+'}');
+        self.put_log('отработало DoEvent('+_idApp+','+_idObj+','+ _idEvnt+','+c_args+')'); 
     };
 
     self.CallWS = function(_param)
     {
         //ip сервера задается через function Init()
         var ws_url = "http://"+self.cur_server+"/bwgui.ws2/servlet";
-        
-        
+
+
         self.put_log('отработывает запрос: '+ws_url+'?parameter='+_param); 
         $.ajax({
                     url: ws_url,
@@ -173,6 +173,7 @@ DataModel = function()
                     crossDomain: true,
                     success: self.WorkRez,
                     error: self.DisplayErr,
+		    //fire: self.DisplayErr,
                     fail: self.FailErr
 
                 });
@@ -185,75 +186,80 @@ DataModel = function()
                             }
                         }       */
     };
-    
+
+    this.refreshUIBind =function(_id)
+    {
+        self.put_log('начало работать refreshUIBind('+_id+')'); 
+        ko.cleanNode(document.getElementById(_id));
+        ko.applyBindings(self, document.getElementById(_id));
+        self.put_log('отработало refreshUIBind('+_id+')'); 
+    };
     this.makeUI = function(_parent_id, _id, _content)
-    {      
+    {
         if(_parent_id!=='')
         {
             self.put_log('начало работать makeUI('+'#'+_parent_id+','+_id+','+ _content+')'); 
             $('#'+_parent_id).append(_content);
-            ko.cleanNode(document.getElementById(_id));
-            ko.applyBindings(self, document.getElementById(_id));
+	    self.refreshUIBind(_id);
             self.put_log('отработало makeUI('+_parent_id+','+ _content+')'); 
         }
-        
-    
+
+
     };
     this.makeStyle = function(_parent_id, _id, _content)
-    {      
+    {
         if(_parent_id!=='')
         {
             self.put_log('начало работать makeStyle('+'#'+_parent_id+','+_id+','+ _content+')'); 
             $('head').append(_content);
             self.put_log('отработало makeStyle('+'#'+_parent_id+','+_id+','+ _content+')'); 
         }
-        
-    
+
+
     };
     self.FailErr = function(_data, _textStatus)
     {
-        self.put_log('начало работать FailErr'); 
+        self.put_log('начало работать FailErr');
     };
-    
+
     self.WorkRez = function(_data, _textStatus)
     {
-        self.put_log('начало работать WorkRez '+_data); 
-       
-       
-        //сначала данные потом интерфйес
-        
-        if (JSON.parse(_data).hasOwnProperty("data"))
-        {
-            self.addData(JSON.parse(_data)["objId"], JSON.parse(_data)["data"]);
-        }
-        if (JSON.parse(_data).hasOwnProperty("view")) 
-        {
-            self.makeUI(JSON.parse(_data)["objId_parent"], JSON.parse(_data)["objId"], JSON.parse(_data)["view"]);
-            //self.addItemOfElemenetById('grid2', '1');
-        }
-        if (JSON.parse(_data).hasOwnProperty("css")) 
-        {
-            self.makeStyle(JSON.parse(_data)["objId_parent"], JSON.parse(_data)["objId"], JSON.parse(_data)["css"]);
-            //self.addItemOfElemenetById('grid2', '1');
-        }
-        
-        
-       
-        
-        //  self.getDataById('grid2').valueHasMutated();
-         //ko.utils.arrayPushAll(self.getDataById('grid2'), JSON.parse(_data)["data"]);
-        
+        self.put_log('начало работать WorkRez: '+_data);
+	if (_data)
+	{
+        	//сначала данные потом интерфйес
+	        if (JSON.parse(_data).hasOwnProperty("data"))
+        	{
+	            self.addData(JSON.parse(_data)["objId"], JSON.parse(_data)["data"]);
+	        }
+	        if (JSON.parse(_data).hasOwnProperty("view"))
+	        {
+	            self.makeUI(JSON.parse(_data)["objId_parent"], JSON.parse(_data)["objId"], JSON.parse(_data)["view"]);
+	            //self.addItemOfElemenetById('grid2', '1');
+	        }
+	        if (JSON.parse(_data).hasOwnProperty("css"))
+	        {
+	            self.makeStyle(JSON.parse(_data)["objId_parent"], JSON.parse(_data)["objId"], JSON.parse(_data)["css"]);
+	            //self.addItemOfElemenetById('grid2', '1');
+	        }
+	        if (JSON.parse(_data).hasOwnProperty("query_err"))
+		{
+		    self.put_log('[ОШИБКА] : '+JSON.parse(_data)["query_err"]);
+		}
 
-        self.put_log('oтработало WorkRez'); 
+	        //  self.getDataById('grid2').valueHasMutated();
+	        //ko.utils.arrayPushAll(self.getDataById('grid2'), JSON.parse(_data)["data"]);
+        }
+        self.put_log('oтработало WorkRez');
     };
     self.DisplayErr = function(_XMLHttpRequest, _textStatus, _errorThrown)
     {
         //document.getElementById("3").innerHTML = _XMLHttpRequest + "("+_textStatus+")";
-        self.put_log('отработало DisplayErr'); 
+        self.put_log('отработало DisplayErr');
     };
-    
-        
-    self.put_log('отработало PagedGridModel');  
+
+
+    self.put_log('отработало PagedGridModel');
 };
 
 function Init()
