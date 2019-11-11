@@ -54,6 +54,15 @@ DataModel = function()
     //self.items.push(ko.observable(1));
     self.put_log('массив проинициализирован');
 
+    self.getSearchParam = function(pName)
+    {
+	 var search = location.search.substring(location.search.search('{'));
+	 //var jsearch = JSON.parse('{"'+search.replace(/&/g, '","').replace(/=/g,'":"')+'"}', function(key,value) { return key===""?value:decodeURIComponent(value)});
+	 var jsearch = JSON.parse(search.replace(/%22/g,'"'));
+	 self.put_log('парсим '+search.replace(/%22/g,'"')+',  ищем '+pName+', получаем '+jsearch[pName]);
+	 return jsearch[pName]; 
+    };
+
 
     self.getData = function(element)
     {
@@ -268,11 +277,8 @@ function Init()
 
     dModel.addData('grid', initialData);
     dModel.set_server(this.location.host);
-    
     console.log('переменные инициализированы');
-    
     ko.applyBindings(dModel);
-    
     console.log('применился биндинг');
 };
 
