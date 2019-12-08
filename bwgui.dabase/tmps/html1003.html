@@ -1,0 +1,16 @@
+update bwgui_processor.html set body = '
+<div>
+	<div id="propview">
+		<h3 data-bind="width: $(''#propview'').width">свойства</h3>
+		<ul data-bind="foreach: dModel.getDataById(''propview'')[0].query_rez">
+			<li>
+				<span  class="required category" data-bind="text: t_column"/>
+				<span  class="required category" data-bind="text: t_value"/>
+			</li>
+		</ul>
+	</div>
+	<script>
+		$(function(){$("#propview").accordion({header: "h3", collapsible: "true"});});
+	</script>
+</div>
+' where html=1003;

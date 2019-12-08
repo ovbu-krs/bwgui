@@ -1,0 +1,47 @@
+update bwgui_processor.html set body='
+<div id="maindiv">
+	<div id="splitter">
+		<div class="top">
+ 			<button  data-bind="click: function(data, event) { refreshUIBind(''dst''); $(''#ui-id-1'').click(); $(''#ui-id-2'').click(); }"> Refersh </button>
+		</div>
+		<div class="pane" id="tocPane">
+			<div class="inner">
+				<div id="tree" data-bind="event:{onload:DoEvent(getSearchParam(''idApp''),1002,1,''{}'')}"></div>
+			</div>
+		</div>
+		<div class="mid_pane" id="contentPane">
+			<div class="inner">
+				<div id="accord">
+					<h3>код</h3>
+					<div id="cont">
+						<textarea id="src" rows=30 class="hello"><em>Подробнее <a href="report.html">тут</a>.</em></textarea>
+					</div>
+					<h3>представление</h3>
+					<div id="view" class="brd">
+						<div id="dst" data-bind="html: src.value"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="pane">
+			<div class="inner">
+				<div id="prop">	</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function(){$("#accord").accordion({header: "h3", heghtStyle: "fill", collapsible: true });});
+</script>
+<!--<script>
+$(function(){
+	$(''#splitter > div:first'').resizable({thandles: ''e'', minWidth: 100, maxWidth: 400,
+	resize: function() {
+		var remainigSpace = $(this).parent().width()-$(this).outerWidth();
+		var divTwo = $(this).next();
+		var divTwoWidth  = remainigSpace-(divTwo.outerWidth()-divTwo.width());
+		divTwo.css(''width'', divTwoWidth + ''px'');
+	});
+});
+</script>-->
+' where html=1001;

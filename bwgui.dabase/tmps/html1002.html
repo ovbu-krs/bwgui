@@ -1,0 +1,19 @@
+update bwgui_processor.html set body='
+<div>
+	<span>выбран:</span>
+	<span id="current">выбирите объект</span>
+	<div id="treeview">
+		<h3 data-bind="width: $(''#treevew'').width">вид</h3>
+		<ul id="picker" data-bind="foreach: dModel.getDataById(''treeview''), 
+				click: function(data, event) { 
+								$(''#current'').text($(event.target).attr(''id'')); 
+								dModel.DoEvent(getSearchParam(''idApp''),1002,2,{''html'':$(event.target).attr(''id'')});
+								}">
+			<li><span  class="required category" data-bind="text: description, attr: { id: html }"></li>
+		</ul>
+	</div>
+	<script>
+		$(function(){$("#treeview").accordion({header: "h3", collapsible: "true"});});
+	</script>
+</div>
+' where html=1002;
