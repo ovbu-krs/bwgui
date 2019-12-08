@@ -22,34 +22,32 @@ import javax.naming.NamingException;
  *
  * @author Oleg
  */
-public class BaseConnector 
+public class BaseConnector
 {
-    public static String Exec(String args) 
+    public static String Exec(String args)
     {
-        
         String rez = "";
+	Connection connection = null;
         try //(
-                
-                
-                //Connection connection = DriverManager.getConnection("jdbc:postgresql://192.168.1.143:5432/postgres", "pgsql","pgsql"); 
-                //Connection connection = DriverManager.getConnection("jdbc:PostgreSQL://192.168.1.12:5432/postgres", "postgres","postgres"); 
-                //Statement satement = connection.createStatement(); 
+                //Connection connection = DriverManager.getConnection("jdbc:postgresql://192.168.1.143:5432/postgres", "pgsql","pgsql");
+                //Connection connection = DriverManager.getConnection("jdbc:PostgreSQL://192.168.1.12:5432/postgres", "postgres","postgres");
+                //Statement satement = connection.createStatement();
                 //ResultSet result = satement.executeQuery("select bwgui_processor.do_event('" + args + "')");
-             //) 
+             //)
         {
             DataSource ds = (DataSource) InitialContext.doLookup( "java:/comp/env/jdbc/postgres_pi2" );
-            if ( ds == null ) 
+            if ( ds == null )
             {
              throw new NamingException("Data source not found!");
             }
-            Connection connection = ds.getConnection();
-            if ( connection == null ) 
+            connection = ds.getConnection();
+            if ( connection == null )
             {
               throw new NamingException("Not connect to DataBase!");
             }
-            Statement satement = connection.createStatement(); 
+            Statement satement = connection.createStatement();
             ResultSet result = satement.executeQuery("select bwgui_processor.do_event('" + args + "')");
-            
+
             while(result.next())
             {
                 rez += result.getString(1) + "\n";
@@ -60,16 +58,28 @@ public class BaseConnector
                 rez = "пусто";
             }
         }
-        catch (SQLException e) 
+        catch (SQLException e)
         {
             //rez = "errr";
             rez = e.getLocalizedMessage();
         }
-        catch (NamingException e) 
+        catch (NamingException e)
         {
-            
             rez = e.getMessage();
         }
+	finally
+	{
+		try
+		{
+			if (connection != null)
+			{
+				connection.close();
+			}
+		}
+		catch (SQLException e)
+		{
+		}
+	}
         return rez;
     }
 }

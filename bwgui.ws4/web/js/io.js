@@ -160,10 +160,17 @@ DataModel = function()
     {
         self.put_log('начало работать DoEvent('+_idApp+','+_idObj+','+ _idEvnt+','+_Args+')'); 
 	var c_args = '{}';
-	if( _Args.length > 0 )
+        self.put_log('_Args '+typeof(_Args)); 
+
+	if(typeof(_Args) === 'object')
+	{
+		c_args = JSON.stringify(_Args);
+	}
+	else if(typeof(_Args) === 'string' &&  _Args.length > 0)
 	{
 		c_args = _Args;
 	}
+
         self.CallWS('{"idApp":'+_idApp+', "idObj":'+_idObj+', "idEvnt":'+_idEvnt+', "args":'+c_args+'}');
         self.put_log('отработало DoEvent('+_idApp+','+_idObj+','+ _idEvnt+','+c_args+')'); 
     };
