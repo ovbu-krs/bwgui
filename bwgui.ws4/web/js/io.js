@@ -50,6 +50,24 @@ DataModel = function()
         self.put_log('отработало addData('+name+','+element+')');
     };
 
+    self.deleteData = function(name)
+    {
+        self.put_log('начало работать delteData('+name+')');
+        var mas = self.items.slice(0, self.items.count);
+	for( var i = mas.length-1; i>=0; i--)
+	{
+		if ( mas[i].id === name) 
+		{
+			self.items.splice(i, 1);
+			//self.items.remove(mas[i]);
+		        self.put_log('удален элемнет i='+i+'name = '+name);
+		}
+	}
+	//var data = self.getDataById(name);
+        //self.items.remove(data);
+        self.put_log('отработало delteData('+name+')');
+    }
+
 
     //self.items.push(ko.observable(1));
     self.put_log('массив проинициализирован');
@@ -219,9 +237,19 @@ DataModel = function()
 	    self.refreshUIBind(_id);
             self.put_log('отработало makeUI('+_parent_id+','+ _content+')'); 
         }
-
-
     };
+    this.deleteUI = function(_parent_id, _id)
+    {
+        if(_parent_id!=='')
+        {
+            self.put_log('начало работать deleteUI('+'#'+_parent_id+',#'+_id+')'); 
+//	    ko.cleanNode($('#'+name));
+            $('#'+_parent_id).empty(); // +' > #'+_id).remove();
+            self.put_log('отработало deleteUI(#'+_parent_id+',#'+_id+')'); 
+        }
+    };
+
+
     this.makeStyle = function(_parent_id, _id, _content)
     {
         if(_parent_id!=='')
@@ -244,6 +272,12 @@ DataModel = function()
 	if (_data)
 	{
         	//сначала данные потом интерфйес
+	        if (JSON.parse(_data).hasOwnProperty("clear") && JSON.parse(_data)["clear"] === 1 )
+        	{
+		    self.deleteUI(JSON.parse(_data)["objId_parent"], JSON.parse(_data)["objId"]);
+	            self.deleteData(JSON.parse(_data)["objId"]);
+
+	        }
 	        if (JSON.parse(_data).hasOwnProperty("data"))
         	{
 	            self.addData(JSON.parse(_data)["objId"], JSON.parse(_data)["data"]);

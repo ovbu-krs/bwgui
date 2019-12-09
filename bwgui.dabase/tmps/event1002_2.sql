@@ -1,5 +1,6 @@
 update bwgui_processor.objects_events set query ='
 select json_build_object(
+''clear'', 1,
 ''objId_parent'',''prop'',
 ''objId'',''propview'',
 ''view'', (select to_json(body) from bwgui_processor.html h where h.html = 1003),
