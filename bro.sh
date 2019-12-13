@@ -1,0 +1,1 @@
+startx /usr/bin/chromium-browser --window-size=1680,1050 --start-maximized "http://127.0.0.1/browser" "http://127.0.0.1:8080" "http://127.0.0.1:8080/bwgui.ws2/servlet?parameter={%22idApp%22:0,%22idObj%22:0,%22idEvnt%22:0,%22args%22:{}}"
