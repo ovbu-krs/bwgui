@@ -1,0 +1,120 @@
+const url = require('url');
+const fs = require('fs');
+const baseConnector = require(__dirname+'/BaseConnector.js');
+
+
+const m_servlet  = function(req, res) 
+{
+
+
+  console.log('обращение к серверу');
+
+
+  // Теперь получаем наш адрес. Если мы переходим на localhost:3000/test, то path будет '/test'
+  const urlParsed = url.parse(req.url, true);
+  let path = urlParsed.pathname;
+  let rez;
+
+  // Теперь записываем полный путь к server.js. Мне это особенно нужно, так как сервер будет
+  // висеть в systemd, и путь, о котором он будет думать, будет /etc/systemd/system/...
+  prePath = __dirname;
+
+  try
+  {
+
+    // До этого мы уже получили path и prePath. Теперь осталось понять, какие запросы
+    // мы получаем. Отсеиваем все запросы по точке, так чтобы туда попали только запросы к
+    // файлам, например: style.css, test.js, song.mp3
+    if(/\./.test(path)) 
+    {
+	if(path=='favicon.ico')
+	{
+		
+	}
+        // А вот если у нас не иконка, то нам нужно понять, что это за файл, и сделать нужную
+        // запись в res.head, чтобы браузер понял, что он получил именно то, что и ожидал.
+        // На данный момент мне нужны css, js и mp3 от сервера, так что я заполнил только
+        // эти случаи, но, на самом деле, стоит написать отдельный модуль для этого.
+        else if(/\.mp3$/gi.test(path))
+	{
+          res.writeHead(200, {'Content-Type': 'audio/mpeg'});
+        }
+        else if(/\.css$/gi.test(path))
+	{
+          res.writeHead(200, {'Content-Type': 'text/css'});
+        }
+        else if(/\.js$/gi.test(path))
+	{
+            res.writeHead(200, {'Content-Type': 'application/javascript'});
+        }
+	//Опять же-таки, отдаём потом серверу и пишем return, чтобы он не шёл дальше.
+	let l_path = prePath + path;
+	console.log('обращение к файлу:'+l_path);
+	let readStream = fs.createReadStream(l_path);
+        readStream.pipe(rez);
+        return rez;
+
+	//fs.readFile(l_path, (err , data) => {
+ 	//      if(err)
+	//	{
+	//		console.log(err.message);
+	//		 throw err;
+	//	}
+       	//      res.write(data);
+	//      return;
+        //  });
+      }
+
+    
+    try
+    {
+        res.writeHead(200, {'Content-Type': 'text/html;charset=UTF-8'});
+	//let parameter =  urlParsed.parameter!= null ? urlParsed.parameter : 'new';
+	let par = decodeURI(urlParsed.search.replace('?parameter=', '').trim());
+	console.log('обращение к BaseConnector '+par);
+        baseConnector.do_query((par, rez)=>{
+	console.log('результат обращения: '+rez);
+	//res.write(rez);
+	});
+     }
+     catch (e)
+     {
+        rez = e.message;
+     }
+     return rez;
+ }
+ catch (err)
+ {
+      console.log('Обработка ошибки:'+err.message);
+      // Находим наш путь к статическому файлу и пытаемся его прочитать.
+      // Если вы не знаете, что это за '=>', тогда прочитайте про стрелочные функции в es6,
+      // очень крутая штука.
+     let filePath = './src/page/index.html';
+     fs.readFile(filePath, 'utf-8', (err_load, html) => {
+        // Если не находим файл, пытаемся загрузить нашу страницу 404 и отдать её.
+        // Если находим — отдаём, народ ликует и устраивает пир во имя царя-батюшки.
+        if(err_load) {
+          let nopath = './src/page/err.html';
+          fs.readFile(nopath, (err_load2 , html) => {
+            if(!err_load2) {
+              res.writeHead(404, {'Content-Type': 'text/html'});
+              res.write(html.toString().replace('Ошибка.', 'Ошибка:'+err.message));
+            }
+            // На всякий случай напишем что-то в этом духе, мало ли, иногда можно случайно
+            // удалить что-нибудь и не заметить, но пользователи обязательно заметят.
+            else{
+              let text = "Something went wrong:"+err.message;
+              res.writeHead(404, {'Content-Type': 'text/plain'});
+              res.write(text);
+            }
+          });
+        }
+        else{
+          // Нашли файл, отдали, страница загружается.
+          res.writeHead(200, {'Content-Type': 'text/html'});
+          res.write(html);
+        }
+      });
+ }
+};
+exports.m_servlet = m_servlet;

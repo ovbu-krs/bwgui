@@ -1,13 +1,36 @@
 update bwgui_processor.html set body = '
 <div>
+	<span>выбран:</span>
+	<span id="currentProp">выбирите свойство</span>
 	<div id="propview">
 		<h3 data-bind="width: $(''#propview'').width">свойства</h3>
-		<ul data-bind="foreach: dModel.getDataById(''propview'')[0].query_rez">
-			<li>
-				<span  class="required category" data-bind="text: t_column"/>
-				<span  class="required category" data-bind="text: t_value"/>
-			</li>
-		</ul>
+		<div>
+			<table>
+				<thread>
+					<tr>
+						<th>свойство</th>
+						<th>значение</th>
+					</tr>
+				</thread>
+				<tbody data-bind="foreach: dModel.getDataById(''propview'')[0].query_rez, click: function(data, event) {
+						$(''#cont>#src'').text($(event.target).parent().find(''#paramValue'').text());
+						$(''#prop>div>#currentProp'').text($(event.target).parent().find(''#paramName'').text());
+						dModel.refreshUIBind(''dst'');
+		 				dModel.DoEvent(dModel.getSearchParam(''idApp''),1003,2,{''param'':$(event.target).parent().find(''#paramName'').text()});
+		                		}">
+					<tr id="rowView" data-bind="if: t_value.length<10">
+							<td  id="paramName" data-bind="text: t_column"/>
+							<td  data-bind="text: t_value"/>
+							<td  id="paramValue" hidden=1 data-bind="text: t_value"/>
+					</tr>
+					<tr id="rowView" data-bind="if: t_value.length>=10">
+							<td  id="paramName" data-bind="text: t_column"/>
+							<td  data-bind="text:''...''"/>
+							<td  id="paramValue" hidden=1 data-bind="text: t_value"/>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 	<script>
 		$(function(){$("#propview").accordion({header: "h3", collapsible: "true"});});

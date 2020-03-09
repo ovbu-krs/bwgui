@@ -1,0 +1,56 @@
+const {Client} = require('pg');
+const client = new Client({connectionString: 'postgresql://pi:pi@localhost:5432/pi',});
+
+
+const do_query = function(args, rez)
+{
+	try
+	{
+
+		client.connect(function(err){
+		if(err)
+			console.log('error connection to base: '+err);
+		else
+			console.log('openet connection to base');
+		});
+		console.log('opened connection to base');
+		//(
+	                //Connection connection = DriverManager.getConnection("jdbc:postgresql://192.168.1.143:5432/postgres", "pgsql","pgsql");
+	                //Connection connection = DriverManager.getConnection("jdbc:PostgreSQL://192.168.1.12:5432/postgres", "postgres","postgres");
+	                //Statement satement = connection.createStatement();
+	                //ResultSet result = satement.executeQuery("select bwgui_processor.do_event('" + args + "')");
+	             //)
+	            //if ( client == null )
+	            //{
+	            //  throw new NamingException("Not connect to DataBase!");
+	            //}
+	            //client.query('select bwgui_processor.do_event(' + args + ')', (err,rez)=>{
+	            client.query('SELECT NOW)', (err,res)=>{
+			console.log(err,res)
+			console.log('query to base done')
+			client.end()
+			console.log('closed connection to base')
+
+			});
+
+        }
+        catch (e)
+        {
+            rez = e.message;
+	}
+	finally
+	{
+		try
+		{
+			if (client != null)
+			{
+				client.end();
+			}
+		}
+		catch (e)
+		{
+		}
+	}
+
+};
+exports.do_query = do_query;
