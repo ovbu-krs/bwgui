@@ -13,10 +13,15 @@ update bwgui_processor.html set body = '
 					</tr>
 				</thread>
 				<tbody data-bind="foreach: dModel.getDataById(''propview'')[0].query_rez, click: function(data, event) {
+<<<<<<< HEAD
 						$(''#cont>#src'').text($(event.target).parent().find(''#paramValue'').text());
 						$(''#prop>div>#currentProp'').text($(event.target).parent().find(''#paramName'').text());
 						dModel.refreshUIBind(''dst'');
 		 				dModel.DoEvent(dModel.getSearchParam(''idApp''),1003,2,{''param'':$(event.target).parent().find(''#paramName'').text()});
+=======
+						$(''#prop>div>#currentProp'').text($(event.target).parent().find(''#paramName'').text());
+						dModel.DoEvent(dModel.getSearchParam(''idApp''),1003,2,{''obj'':$(''#tree>div>#current'').text(),''param'':$(event.target).parent().find(''#paramName'').text()});
+>>>>>>> 83d660d87652955a002084239ef8f43988f7c80e
 		                		}">
 					<tr id="rowView" data-bind="if: t_value.length<10">
 							<td  id="paramName" data-bind="text: t_column"/>
@@ -37,3 +42,6 @@ update bwgui_processor.html set body = '
 	</script>
 </div>
 ' where html=1003;
+--$(''#cont>#src'').text($(event.target).parent().find(''#paramValue'').text());
+--dModel.refreshUIBind(''dst'');
+

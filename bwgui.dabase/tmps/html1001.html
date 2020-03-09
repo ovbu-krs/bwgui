@@ -2,13 +2,14 @@ update bwgui_processor.html set body='
 <div id="maindiv">
 	<div id="splitter">
 		<div class="top">
- 			<button  data-bind="click: function(data, event) { refreshUIBind(''dst''); $(''#ui-id-1'').click(); $(''#ui-id-2'').click(); }"> Refersh </button>
+ 			<button  data-bind="click: function(data, event) { refreshUIBind(''dst''); $(''#accord>#ui-id-2'').click(); $(''#accord>#ui-id-3'').click(); }"> Refersh </button>
 		</div>
 		<div class="pane" id="tocPane">
 			<div class="inner">
 				<div id="tree" data-bind="event:{onload:DoEvent(getSearchParam(''idApp''),1002,1,''{}'')}"></div>
 			</div>
 		</div>
+<<<<<<< HEAD
 		<div class="mid_pane" id="contentPane">
 			<div class="inner">
 				<div id="accord">
@@ -21,6 +22,10 @@ update bwgui_processor.html set body='
 						<div id="dst" data-bind="html: src.value"></div>
 					</div>
 				</div>
+=======
+		<div class="mid_pane" id="contentPane" >
+			<div id="contentView" class="inner" data-bind="event: { onload: DoEvent(getSearchParam(''idApp''),1004,1,''{}'')}">
+>>>>>>> 83d660d87652955a002084239ef8f43988f7c80e
 			</div>
 		</div>
 		<div class="pane">
@@ -30,9 +35,6 @@ update bwgui_processor.html set body='
 		</div>
 	</div>
 </div>
-<script>
-	$(function(){$("#accord").accordion({header: "h3", heghtStyle: "fill", collapsible: true });});
-</script>
 <!--<script>
 $(function(){
 	$(''#splitter > div:first'').resizable({thandles: ''e'', minWidth: 100, maxWidth: 400,

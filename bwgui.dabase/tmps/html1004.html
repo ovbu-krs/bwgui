@@ -1,0 +1,17 @@
+update bwgui_processor.html set body=
+'				<div id="accord">
+					<h3>код</h3>
+					<div id="cont">
+						<textarea id="src" class="hello" data-bind="text: dModel.getDataById(''accord'')[0][''txt'']"></textarea>
+					</div>	
+					<h3>представление</h3>
+					<div id="view" class="brd">
+						<div id="dst" data-bind="html: src.value"></div>
+					</div>
+				</div>
+<script>
+	$(function(){$("#accord").accordion({header: "h3", heghtStyle: "fill", collapsible: true });});
+</script>
+
+'
+where html = 1004;
