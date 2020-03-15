@@ -3,8 +3,8 @@
 const url = require('url');
 const fs = require('fs');
 const baseConnector = require(__dirname+'/BaseConnector.js');
-const {Pool} = require('pg');
-const pool = new Pool({connectionString: 'postgresql://pi:pi@localhost:5432/pi',});
+//const {Pool} = require('pg');
+//const pool = new Pool({connectionString: 'postgresql://pi:pi@localhost:5432/pi',});
 
 
 const servlet = function(req, res, postData) {
@@ -102,12 +102,12 @@ const servlet = function(req, res, postData) {
       // Находим наш путь к статическому файлу и пытаемся его прочитать.
       // Если вы не знаете, что это за '=>', тогда прочитайте про стрелочные функции в es6,
       // очень крутая штука.
-     let filePath = prePath+'/static'+path+'/index.html';
+      let filePath = prePath+'/page/index.html';
       fs.readFile(filePath, 'utf-8', (err, html) => {
         // Если не находим файл, пытаемся загрузить нашу страницу 404 и отдать её.
         // Если находим — отдаём, народ ликует и устраивает пир во имя царя-батюшки.
         if(err) {
-          let nopath = '/var/www/html/nodejs/routing/nopage/index.html';
+          let nopath = prePath+'/page/err.html';
           fs.readFile(nopath, (err , html) => {
             if(!err) {
               res.writeHead(404, {'Content-Type': 'text/html'});
@@ -116,7 +116,7 @@ const servlet = function(req, res, postData) {
             // На всякий случай напишем что-то в этом духе, мало ли, иногда можно случайно
             // удалить что-нибудь и не заметить, но пользователи обязательно заметят.
             else{
-              let text = "Something went wrong. Please contact webmaster@forgetable.ru";
+              let text = "Something went wrong. Please contact admin";
               res.writeHead(404, {'Content-Type': 'text/plain'});
               res.end(text);
             }
@@ -128,7 +128,7 @@ const servlet = function(req, res, postData) {
           res.end(html);
         }
       });
+	return;
     }
-   
 };
 exports.servlet = servlet;

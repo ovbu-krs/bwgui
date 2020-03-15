@@ -1,10 +1,20 @@
 const {Pool} = require('pg');
-const pool = new Pool({connectionString: 'postgresql://pi:pi@localhost:5432/pi',});
+//const pool = new Pool({connectionString: 'postgresql://pi:pi@localhost:5432/pi',});
+pool = new Pool({
+	user: 'pi',
+	host: 'localhost',
+	database: 'pi',
+	password: 'pi',
+	port: 5432,
+	max: 10,
+	min: 5,
+	dleTimeoutMillis: 1000,
+	connectionTimeoutMillis: 3000
+});
 
 
 const do_query = function(args)
 {
-	 
 	return new Promise(function(resolve, reject) {
 			try
 			{
@@ -12,31 +22,25 @@ const do_query = function(args)
 				pool.connect((err,client,done)=>{
 					if(err)
 					{
-						done();
-						console.log('error connection to base:' +err);
+						return console.log('error connection to base:' +err);
 					}
-					else
-					{
-						console.log('connection to base opened');
-
-						//client.query('SELECT NOW()', (err,res)=>{
-						//console.log('SELECT bwgui_processor.do_event(\''+args+'\')');
-						client.query('SELECT bwgui_processor.do_event(\''+args+'\')', (err,res)=>{
-						//client.query('SELECT bwgui_processor.do_event(\'{"idApp":0,"idObj":0,"idEvnt":0, "args":{}}\')', (err,res)=>{
+					console.log('connection to base opened');
+					console.log('запрос к БД');
+					console.log('SELECT bwgui_processor.do_event(\''+args+'\')');
+					client.query('SELECT bwgui_processor.do_event(\''+args+'\')', (err,res)=>{
+						done();
 						console.log('получил');
 						console.log(err,res)
 						resolve(res);
-						console.log('query to base done')
-						client.end()
-						console.log('closed connection to base')
+						console.log('передедал результат')
+						//client.end()
+						//console.log('closed connection to base')
 						});
-						done();
-					}
 				});
 			}
 			catch (e)
 			{
-				console.log(e.message);
+				console.log('Ошибка при работе с клиентом БД: '+e.message);
 				reject(e.message);
 			}
 			finally
@@ -50,7 +54,7 @@ const do_query = function(args)
 				}
 				catch (e)
 				{
-					console.log(e.message);
+					console.log('Что то не так с соединением БД '+e.message);
 				}
 			}
 	});
