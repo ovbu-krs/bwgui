@@ -11,53 +11,47 @@ pool = new Pool({
 	dleTimeoutMillis: 1000,
 	connectionTimeoutMillis: 3000
 });
-
-
 const do_query = function(args)
 {
 	return new Promise(function(resolve, reject) {
-			try
-			{
-				console.log('connecting to base');
-				pool.connect((err,client,done)=>{
-					if(err)
-					{
-						return console.log('error connection to base:' +err);
-					}
-					console.log('connection to base opened');
-					console.log('запрос к БД');
-					console.log('SELECT bwgui_processor.do_event(\''+args+'\')');
-					client.query('SELECT bwgui_processor.do_event(\''+args+'\')', (err,res)=>{
-						done();
-						console.log('получил');
-						console.log(err,res)
-						resolve(res);
-						console.log('передедал результат')
-						//client.end()
-						//console.log('closed connection to base')
-						});
-				});
-			}
-			catch (e)
-			{
-				console.log('Ошибка при работе с клиентом БД: '+e.message);
-				reject(e.message);
-			}
-			finally
-			{
+		try
+		{
+//			console.log('соединение с БД');
+			pool.connect((err,client,done)=>{
 				try
 				{
-					if (client != null)
+					if(err)
 					{
-						client.end();
+						done();
+						reject('ошибка при соединенеия с БД: '+err);
 					}
+//					console.log('соединение с БД - открыто');
+//					console.log('запрос к БД - SELECT bwgui_processor.do_event(\''+args+'\')');
+					client.query('SELECT bwgui_processor.do_event(\''+args+'\')', (err,res)=>{
+						done();
+						if(err)
+						{
+//							console.error('Ошибка выплненеия запроса:'+err);
+							reject('ошибка выплненеия запроса SELECT bwgui_processor.do_event(\''+args+'\'): '+err);
+						}
+						else
+						{
+//							console.log('получил результат',res)
+							resolve(res);
+						}
+//						console.log('передедал результат')
+					});
 				}
 				catch (e)
 				{
-					console.log('Что то не так с соединением БД '+e.message);
+					reject('ошибка при соединение с БД: '+e);
 				}
-			}
+			});
+		}
+		catch (e)
+		{
+			reject('ошибка при обращении к клиенту БД:'+e);
+		}
 	});
-
 };
 exports.do_query = do_query;

@@ -9,12 +9,14 @@ let server = new http.Server(function(req, res) {
   // всю нашу полученную информацию в переменную jsonString
   var jsonString = '';
   res.setHeader('Content-Type', 'application/json');
-  req.on('data', (data) => { // Пришла информация - записали.
-      jsonString += data;
+  req.on('data', (data) => {
+	// Пришла информация - записали.
+ 	jsonString += data;
   });
 
-  req.on('end', () => {// Информации больше нет - передаём её дальше.
-      js.servlet(req, res, jsonString); // Функцию define мы ещё не создали.
+  req.on('end', () => {
+ 	// Информации больше нет - передаём её дальше.
+ 	js.servlet(req, res, jsonString); // Функцию define мы ещё не создали.
   });
 });
 server.listen(8000, 'localhost');

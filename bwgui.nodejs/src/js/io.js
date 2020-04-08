@@ -269,7 +269,7 @@ DataModel = function()
     self.WorkRez = function(_data, _textStatus)
     {
         self.put_log('начало работать WorkRez: '+_data);
-	if (_data)
+	if (_data && _data.trim()!=="null")
 	{
         	//сначала данные потом интерфйес
 	        if (JSON.parse(_data).hasOwnProperty("clear") && JSON.parse(_data)["clear"] === 1 )
