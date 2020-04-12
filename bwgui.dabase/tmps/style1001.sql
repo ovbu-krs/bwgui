@@ -22,7 +22,7 @@ update bwgui_processor.style set body='
 		margin-bottom: 0;
 		padding-bottom: 0;
 	}
-	.pane 
+	.pane
 	{
 		overflow: hidden;
 		background: #d6dde5 url(./js/images/ui-bg_diagonals-small_50_262626_40x40.png) no-repeat right center;
@@ -39,7 +39,7 @@ update bwgui_processor.style set body='
 	{
 		padding: 0 5px;
 	}
-	textarea 
+	textarea
 	{
 		height: 70vh;
 	}
