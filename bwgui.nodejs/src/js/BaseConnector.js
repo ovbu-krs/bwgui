@@ -1,10 +1,13 @@
 const {Pool} = require('pg');
+var usr = require('os').userInfo().username;
 //const pool = new Pool({connectionString: 'postgresql://pi:pi@localhost:5432/pi',});
+
+//если пароль не совпадает с пользователем меняем тут usr на то что надо
 pool = new Pool({
-	user: 'pi',
+	user: usr,
 	host: 'localhost',
-	database: 'pi',
-	password: 'pi',
+	database: usr,
+	password: usr,
 	port: 5432,
 	max: 10,
 	min: 5,

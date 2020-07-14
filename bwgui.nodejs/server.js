@@ -2,7 +2,7 @@
 // Для начала установим зависимости.
 const http = require('http');
 const js = require(__dirname+'/src/js/servlet.js');
-
+var os = require('os');
 
 let server = new http.Server(function(req, res) {
   // API сервера будет принимать только POST-запросы и только JSON, так что записываем
@@ -19,4 +19,5 @@ let server = new http.Server(function(req, res) {
  	js.servlet(req, res, jsonString); // Функцию define мы ещё не создали.
   });
 });
-server.listen(8000, 'localhost');
+server.listen(8000, os.networkInterfaces());
+//server.listen(8000, 'localhost');
