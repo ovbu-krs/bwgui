@@ -3,6 +3,7 @@ update bwgui_processor.html set body='
 	<div id="splitter">
 		<div class="top">
  			<button  data-bind="click: function(data, event) { refreshUIBind(''dst''); $(''#accord>#ui-id-2'').click(); $(''#accord>#ui-id-3'').click(); }"> Refersh </button>
+ 			<button  data-bind="click: function(data, event) { DoEvent(getSearchParam(''idApp''),$(''#tree > div > #current'')[0].innerText,''save'',{ typeObj : $(''#prop > div > #currentProp'')[0].innerText, src_in : $(''#cont > #src'')[0].value }) }"> Save </button>
 		</div>
 		<div class="pane" id="tocPane">
 			<div class="inner">
